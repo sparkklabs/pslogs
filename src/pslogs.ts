@@ -95,7 +95,7 @@ function pslogs_send(type: string | number, name: string, data: string): void
 {
     fetch(pslogsSlackUrl,
     {
-        method: 'POST',
+        method : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body   : JSON.stringify(
         {
