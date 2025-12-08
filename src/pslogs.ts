@@ -5,6 +5,11 @@
     // ##PM2
 const PM2 = require('pm2')
 
+// #TYPES
+
+    // ##THIS
+type PSLOGS_TT_ARGS = [slackUrl: string, appName?: string]
+
 // #CONSTANTES
 
     // ##THIS
@@ -18,18 +23,23 @@ PSLOGS_KNOWN_STATUS_CODES = [404, 500]
     // ##THIS
 let
 pslogsSlackUrl: string,
+pslogsAppName : string,
 pslogsLastData = ''
 
 // #FUNCTIONS
 
     // ##SET
-function pslogs_set(url: string): void
+function pslogs_set(args: PSLOGS_TT_ARGS): void
 {
-    pslogs_setVars(url)
+    pslogs_setVars(args)
     pslogs_setConnection()
 }
 
-function pslogs_setVars(url: string): void { pslogsSlackUrl = url }
+function pslogs_setVars([slackUrl, appName = 'silent app']: PSLOGS_TT_ARGS): void
+{
+    pslogsSlackUrl = slackUrl
+    pslogsAppName  = appName
+}
 
 function pslogs_setConnection(): void
 {
@@ -104,7 +114,7 @@ function pslogs_send(type: string | number, name: string, data: string): void
                 {
                     type : 'mrkdwn',
                     color: '#27AE61',
-                    text : `*&lt;PSLOGS ~ ${name}&gt; [${type}]:*`
+                    text : `*PSLOGS ~ ${name} &lt;${pslogsAppName}&gt; [${type}]:*`
                 },
                 {
                     type : 'mrkdwn',
@@ -118,7 +128,7 @@ function pslogs_send(type: string | number, name: string, data: string): void
 }
 
     // ##RUN
-function pslogs_run(url: string): void { pslogs_set(url) }
+function pslogs_run(...args: PSLOGS_TT_ARGS): void { pslogs_set(args) }
 
     // ##UTILS
 function pslogs_error(err: any): void
